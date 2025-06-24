@@ -51,4 +51,10 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+vim.keymap.set('v', '<C-c>', '"+y')
+
+-- Paste from system clipboard
+vim.keymap.set('n', '<C-v>', '"+gP')
+vim.keymap.set('i', '<C-v>', '<C-r>+')
+vim.keymap.set('c', '<C-v>', '<C-r>+')
 -- vim: ts=2 sts=2 sw=2 et

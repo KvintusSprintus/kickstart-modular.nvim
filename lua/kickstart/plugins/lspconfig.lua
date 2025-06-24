@@ -30,6 +30,12 @@ return {
       'saghen/blink.cmp',
     },
     config = function()
+      vim.filetype.add {
+        extension = {
+          bicep = 'bicep',
+          bicepparam = 'bicep-params',
+        },
+      }
       -- Brief aside: **What is LSP?**
       --
       -- LSP is an initialism you've probably heard, but might not understand what it is.
@@ -208,30 +214,48 @@ return {
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        -- clangd = {},
-        -- gopls = {},
-        -- pyright = {},
-        -- rust_analyzer = {},
-        -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-        --
-        -- Some languages (like typescript) have entire language plugins that can be useful:
-        --    https://github.com/pmizio/typescript-tools.nvim
-        --
-        -- But for many setups, the LSP (`ts_ls`) will work just fine
-        -- ts_ls = {},
-        --
+        bicep = {
+          -- either the wrapper on PATH:
+          cmd = { 'bicep-lsp' },
+          -- or the DLL via dotnet:
+          -- cmd    = { 'dotnet', '/usr/local/bin/bicep-langserver/Bicep.LangServer.dll' },
 
-        lua_ls = {
-          -- cmd = { ... },
-          -- filetypes = { ... },
-          -- capabilities = {},
-          settings = {
-            Lua = {
-              completion = {
-                callSnippet = 'Replace',
+          -- make sure both filetypes are present:
+          filetypes = { 'bicep', 'bicep-params' },
+
+          -- project root detection (fallback to file’s dir):
+          root_dir = function(fname)
+            local git = vim.fs.find('.git', { path = fname, upward = true })[1]
+            return vim.fs.dirname(git or fname)
+          end,
+
+          -- any extra initOptions:
+          init_options = {},
+          -- clangd = {},
+          -- gopls = {},
+          -- pyright = {},
+          -- rust_analyzer = {},
+          -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
+          --
+          -- Some languages (like typescript) have entire language plugins that can be useful:
+          --    https://github.com/pmizio/typescript-tools.nvim
+          --
+          -- But for many setups, the LSP (`ts_ls`) will work just fine
+          -- ts_ls = {},
+          --
+
+          lua_ls = {
+            -- cmd = { ... },
+            -- filetypes = { ... },
+            -- capabilities = {},
+            settings = {
+              Lua = {
+                completion = {
+                  callSnippet = 'Replace',
+                },
+                -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+                -- diagnostics = { disable = { 'missing-fields' } },
               },
-              -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-              -- diagnostics = { disable = { 'missing-fields' } },
             },
           },
         },
@@ -270,7 +294,13 @@ return {
           end,
         },
       }
+      require('lspconfig').bicep.setup {
+        cmd = servers.bicep.cmd,
+        filetypes = servers.bicep.filetypes,
+        root_dir = servers.bicep.root_dir,
+        init_options = servers.bicep.init_options,
+        capabilities = capabilities,
+      }
     end,
   },
 }
--- vim: ts=2 sts=2 sw=2 et
