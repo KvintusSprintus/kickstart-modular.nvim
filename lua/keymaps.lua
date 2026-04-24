@@ -26,12 +26,19 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 --  Use CTRL+<hjkl> to switch between windows
 --
 --  See `:help wincmd` for a list of all window commands
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
-
+--vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+--vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+--vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+--vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+vim.keymap.set('n', '<A-j>', ':m .+1<CR>==')
+vim.keymap.set('n', '<A-k>', ':m .-2<CR>==')
+vim.keymap.set('i', '<C-h>', '<Left>')
+vim.keymap.set('i', '<C-j>', '<Down>')
+vim.keymap.set('i', '<C-k>', '<Up>', { nowait = true })
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
+vim.keymap.set('i', '<C-l>', '<Right>')
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
 -- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
 -- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
@@ -51,10 +58,10 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
-vim.keymap.set('v', '<C-c>', '"+y')
+--vim.keymap.set('v', '<C-c>', '"+y')
 
 -- Paste from system clipboard
-vim.keymap.set('n', '<C-v>', '"+gP')
-vim.keymap.set('i', '<C-v>', '<C-r>+')
-vim.keymap.set('c', '<C-v>', '<C-r>+')
+--vim.keymap.set('n', '<C-v>', '"+gP')
+--vim.keymap.set('i', '<C-v>', '<C-r>+')
+--vim.keymap.set('c', '<C-v>', '<C-r>+')
 -- vim: ts=2 sts=2 sw=2 et
