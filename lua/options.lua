@@ -15,6 +15,10 @@ vim.o.mouse = 'a'
 -- Don't show the mode, since it's already in the status line
 vim.o.showmode = false
 
+vim.opt.tabstop = 4 -- Number of spaces a <Tab> counts for
+vim.opt.shiftwidth = 4 -- Size of an indent
+vim.opt.expandtab = true -- Use spaces instead of tabs
+vim.opt.softtabstop = 4 -- Number of spaces inserted/deleted when pressing Tab/Backspace
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
