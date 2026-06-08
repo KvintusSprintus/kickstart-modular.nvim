@@ -1,3 +1,3 @@
 using 'test.bicep'
 
-param test = {}
+para

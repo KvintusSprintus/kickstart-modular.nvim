@@ -24,10 +24,7 @@ return {
               },
             },
           },
-<<<<<<< HEAD
-=======
           terminal = {}, -- Enables the `snacks` provider
->>>>>>> 0d7b52d87e1e043ef787116aebdcf724d48d063a
         },
       },
     },
