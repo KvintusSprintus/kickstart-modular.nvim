@@ -46,7 +46,6 @@ require('lazy').setup({
   require 'kickstart.plugins.oil',
   -- require 'kickstart.plugins.kanagawa',
   require 'kickstart.plugins.copilot',
-  --require 'kickstart.plugins.copilotchat',
   --require 'kickstart.plugins.mcphub',
   require 'kickstart.plugins.alpha',
 
