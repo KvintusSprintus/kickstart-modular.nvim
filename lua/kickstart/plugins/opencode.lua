@@ -29,22 +29,50 @@ return {
       },
     },
     config = function()
+      local opencode_cmd = 'opencode --port --agent plan'
+      local side_by_side_opts = {
+        split = 'right',
+        width = math.floor(vim.o.columns * 0.5),
+      }
+
       ---@type opencode.Opts
       vim.g.opencode_opts = {
-        -- Your configuration, if any; goto definition on the type or field for details
+        server = {
+          start = function()
+            require('opencode.terminal').open(opencode_cmd, side_by_side_opts)
+          end,
+          toggle = function()
+            require('opencode.terminal').toggle(opencode_cmd, side_by_side_opts)
+          end,
+        },
       }
 
       vim.o.autoread = true -- Required for `opts.events.reload`
 
       -- Recommended/example keymaps
-      vim.keymap.set({ 'n', 'x' }, '<C-a>', function()
+      vim.keymap.set({ 'n', 'x' }, '<leader>aa', function()
         require('opencode').ask('@this: ', { submit = true })
       end, { desc = 'Ask opencode…' })
-      vim.keymap.set({ 'n', 'x' }, '<C-x>', function()
+      vim.keymap.set({ 'n', 'x' }, '<leader>ax', function()
         require('opencode').select()
       end, { desc = 'Execute opencode action…' })
-      vim.keymap.set({ 'n', 't' }, '<C-.>', function()
+      vim.keymap.set('n', '<leader>at', function()
         require('opencode').toggle()
+
+        vim.schedule(function()
+          for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+            local buf = vim.api.nvim_win_get_buf(win)
+            local ft = vim.bo[buf].filetype
+            local bt = vim.bo[buf].buftype
+            local name = vim.api.nvim_buf_get_name(buf)
+
+            if ft:find 'opencode' or (bt == 'terminal' and name:find 'opencode') then
+              vim.api.nvim_set_current_win(win)
+              vim.cmd.startinsert()
+              return
+            end
+          end
+        end)
       end, { desc = 'Toggle opencode' })
 
       vim.keymap.set({ 'n', 'x' }, 'go', function()
@@ -61,7 +89,7 @@ return {
         require('opencode').command 'session.half.page.down'
       end, { desc = 'Scroll opencode down' })
 
-      -- You may want these if you use the opinionated `<C-a>` and `<C-x>` keymaps above — otherwise consider `<leader>o…` (and remove terminal mode from the `toggle` keymap)
+      -- You may want these if you use opinionated `<C-a>` and `<C-x>` mappings for something else.
       vim.keymap.set('n', '+', '<C-a>', { desc = 'Increment under cursor', noremap = true })
       vim.keymap.set('n', '-', '<C-x>', { desc = 'Decrement under cursor', noremap = true })
     end,
